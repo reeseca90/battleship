@@ -1,20 +1,18 @@
 function playerFactory(name) {
 
-  function shootEnemy(x, y) {
-    const wasHit = board.checkHit(x, y);
+  function shootEnemy(x, y, opponent) {
+    const wasHit = opponent.checkHit(x, y);
     if (wasHit != false) {
-      routeHit(wasHit);
+      routeHit(wasHit, opponent);
     }
   }
 
-  const board = gameBoardFactory();
-
-  const routeHit = (shipInfo) => {
+  const routeHit = (shipInfo, opponent) => {
     const workingStr = shipInfo.split(' ');
     ships[workingStr[0]].receiveHit(workingStr[1]);
     const wasSunk = ships[workingStr[0]].checkIfSunk();
     if (wasSunk) {
-      board.gameState();
+      opponent.gameState();
     }
   }
 
@@ -29,7 +27,6 @@ function playerFactory(name) {
   return {
     name,
     ships,
-    board,
     routeHit,
     shootEnemy
   }
@@ -39,7 +36,6 @@ function gameBoardFactory() {
   // create 2d array for player gameboard
   const board = [...Array(10)].map(() => Array(10).fill( {label: '', value: 0 } ));
   
-  let placedShips = 0;
   let sunkShips = 0;
 
   function placeShip(shipName, shipSize, direction, startingX, startingY) {
@@ -55,15 +51,13 @@ function gameBoardFactory() {
           board[startingX + i][startingY] = {label: shipName + ' ' + i, value: 1};
         }
       } 
-  
-      placedShips++;
-      console.log(placedShips);
     }
 
   function gameState() {
     sunkShips++;
-    if (placedShips === sunkShips) {
+    if (sunkShips === 5) {
       console.log('game over!');
+      throw 'GAME IS OVER';
     } else {
       console.log('keep shooting!');
     }
@@ -85,13 +79,12 @@ function gameBoardFactory() {
     } 
   }
 
-  // auto add ships into fixed locations
-
   return {
     board,
     placeShip,
     gameState,
-    checkHit
+    checkHit,
+    sunkShips
   };
 }
 
@@ -129,3 +122,50 @@ function shipFactory(name, size) {
 }
 
 const player = playerFactory('player');
+const playerBoard = gameBoardFactory();
+const AI = playerFactory('AI');
+const AIBoard = gameBoardFactory();
+
+function placeShips() {
+  playerBoard.placeShip(player.ships.carrier.name, player.ships.carrier.shipSize, 'vertical', 0, 0);
+  playerBoard.placeShip(player.ships.battleship.name, player.ships.battleship.shipSize, 'horizontal', 1, 1);
+  playerBoard.placeShip(player.ships.cruiser.name, player.ships.cruiser.shipSize, 'vertical', 6, 6);
+  playerBoard.placeShip(player.ships.submarine.name, player.ships.submarine.shipSize, 'vertical', 8, 8);
+  playerBoard.placeShip(player.ships.destroyer.name, player.ships.destroyer.shipSize, 'horizontal', 5, 2);
+
+  AIBoard.placeShip(AI.ships.carrier.name, AI.ships.carrier.shipSize, 'vertical', 0, 0);
+  AIBoard.placeShip(AI.ships.battleship.name, AI.ships.battleship.shipSize, 'horizontal', 1, 1);
+  AIBoard.placeShip(AI.ships.cruiser.name, AI.ships.cruiser.shipSize, 'vertical', 6, 6);
+  AIBoard.placeShip(AI.ships.submarine.name, AI.ships.submarine.shipSize, 'vertical', 8, 8);
+  AIBoard.placeShip(AI.ships.destroyer.name, AI.ships.destroyer.shipSize, 'horizontal', 5, 2);
+}
+
+function runGame() {
+  placeShips();
+  // this array mirrors the board arrays and tracks where the AI has shot
+  const AIShots = [...Array(10)].map(() => Array(10).fill(0));
+
+  // this loop actually runs the game
+  while (AIBoard.gameOver != true) {
+    player.shootEnemy(prompt('enter X'), prompt('enter Y'), AIBoard);
+
+    (() => {
+      let goodAIShot = false;
+      let AIx = 0;
+      let AIy = 0;
+
+      // check shots array to not shoot the same spot twice
+      while (goodAIShot === false) {
+        AIx = Math.floor(Math.random() * 10);
+        AIy = Math.floor(Math.random() * 10);
+
+        if (AIShots[AIx][AIy] === 0) {
+          goodAIShot = true;
+        }
+      }
+      
+      AI.shootEnemy(AIx, AIy, playerBoard);
+    })();
+  }
+}
+

@@ -4,10 +4,16 @@ Battleship game
 
 Development in progress:
 
-currently the game creates a board and ships for a player when the playerFactory function is run, then allows the player to run shootEnemy, which checks with the gameBoardFactory object created under the player to see if something exists there (designated by a '1' in that coordinate of the array) and changes it to a 2 (if hit) or a 3 (if miss). 
+currently the game is played through the console by using the runGame() command. it creates two players (AI and user) and populates a separate board for each (currently ship placement is hard coded, change will be made in the future), then prompts the player for an X and Y coordinate (separately) and checks if it is a hit against the computer. Immediately after, the AI will generate a random coordinate pair, verify it has not used that pair yet, then checks that against the player's board for a hit.
 
-need to designate a way to place specific ships and link it to the gameboard array
+after sinking all ships (5), the game ends. Currently it ends by manually throwing a custom GAME OVER error; not the best option but it was what I could get working at the time.
 
-then make two players by default
+TODO:
+create UI 
 
-then code game functionality
+designate a way to place specific ships
+
+option to use two human players
+
+
+*It is all one big file; splitting into modules is something for the future.
