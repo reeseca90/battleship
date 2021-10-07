@@ -1,0 +1,57 @@
+body {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+header {
+  text-align: center;
+  background-color: grey;
+  font-size: 48px;
+  font-weight: bold;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  width: 97vw;
+}
+
+main {
+  display: flex;
+  justify-content: center;
+  background-color: #cfcfcf;
+  font-size: 36px;
+  font-weight: bold;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  width: 97vw;
+  gap: 40px;
+}
+
+section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 24px;
+  background-color: white;
+  min-width: 400px;
+  justify-content: center;
+}
+
+.board {
+  display: flex;
+  border: 1px solid black;
+}
+
+.box {
+  width: 32px;
+  height: 32px;
+  background-color: white;
+  border: 1px solid black;
+}
+
+footer {
+  text-align: center;
+  background-color: grey;
+  font-size: 18px;
+  font-weight: bold;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  width: 97vw;
+}
