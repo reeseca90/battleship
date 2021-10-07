@@ -1,10 +1,22 @@
 function playerFactory(name) {
 
   function shootEnemy(x, y) {
-    board.checkHit(x, y);
+    const wasHit = board.checkHit(x, y);
+    if (wasHit != false) {
+      routeHit(wasHit);
+    }
   }
 
   const board = gameBoardFactory();
+
+  const routeHit = (shipInfo) => {
+    const workingStr = shipInfo.split(' ');
+    ships[workingStr[0]].receiveHit(workingStr[1]);
+    const wasSunk = ships[workingStr[0]].checkIfSunk();
+    if (wasSunk) {
+      board.gameState();
+    }
+  }
 
   const ships = {
     carrier: shipFactory('carrier', 5),
@@ -18,36 +30,38 @@ function playerFactory(name) {
     name,
     ships,
     board,
+    routeHit,
     shootEnemy
   }
 }
 
 function gameBoardFactory() {
   // create 2d array for player gameboard
-  const board = [...Array(10)].map(e => Array(10).fill(0));
+  const board = [...Array(10)].map(() => Array(10).fill( {label: '', value: 0 } ));
   
   let placedShips = 0;
   let sunkShips = 0;
 
-  function placeShip(shipSize, direction, startingX, startingY) {
+  function placeShip(shipName, shipSize, direction, startingX, startingY) {
     // places ship going DOWN
       if (direction === 'vertical') {
         for (let i = 0; i < shipSize; i++) {
-          board[startingX][startingY + i] = 1;
+          board[startingX][startingY + i] = {label: shipName + ' ' + i, value: 1};
         }
       }
       // places ship going RIGHT
       if (direction === 'horizontal') {
         for (let i = 0; i < shipSize; i++) {
-          board[startingX + i][startingY] = 1;
+          board[startingX + i][startingY] = {label: shipName + ' ' + i, value: 1};
         }
       } 
   
       placedShips++;
-      console.log(placedShips++);
+      console.log(placedShips);
     }
 
   function gameState() {
+    sunkShips++;
     if (placedShips === sunkShips) {
       console.log('game over!');
     } else {
@@ -56,15 +70,18 @@ function gameBoardFactory() {
   }
 
   function checkHit(x, y) {
-    if (board[x][y] === 1) {
+    if (board[x][y].value === 1) {
+      let tempName = board[x][y].label;
       console.log('it\'s a hit!'); // pass this to the ship object
       console.log('set board color to red');
-      board[x][y] = 2;
+      board[x][y] = {label: tempName, value: 2};
+      return tempName;
     } 
-    if (board[x][y] === 0) {
+    if (board[x][y].value === 0) {
       console.log('it\'s a miss!'); // pass this to the ship object
       console.log('set board color to green');
-      board[x][y] = 3;
+      board[x][y] = {label: '', value: 3};
+      return false;
     } 
   }
 
@@ -91,13 +108,13 @@ function shipFactory(name, size) {
     if (shipHits[num] === 0) {
       shipHits[num] = 1;
     }
-    checkIfSunk();
   }
 
   const checkIfSunk = () => {
     if (shipHits.reduce((total, curr) => total + curr) === shipSize) {
       isSunk = true;
       console.log('ship is sunk!');
+      return true;
     }
   }
 
@@ -106,6 +123,9 @@ function shipFactory(name, size) {
     shipSize,
     shipHits,
     isSunk,
-    receiveHit
+    receiveHit,
+    checkIfSunk
   }
 }
+
+const player = playerFactory('player');
