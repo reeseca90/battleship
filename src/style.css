@@ -2,26 +2,34 @@ body {
   display: flex;
   align-items: center;
   flex-direction: column;
-  min-height: 97vh;
+  min-height: 80vh;
 }
 
 header {
   text-align: center;
-  background-color: grey;
-  font-size: 48px;
-  font-weight: bold;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  background-color: black;
   width: 97vw;
+  padding-top: 24px;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
+}
+
+#headText {
+  font-size: 60px;
+  font-weight: bold;
+  font-family: monospace;
+  color: white;
 }
 
 button {
   width: 200px;
   height: 40px;
   margin: 20px;
-  background-color: lightgrey;
-  border: 2px solid black;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  background-color: rgb(97, 97, 97);
+  border: 2px solid white;
   border-radius: 8px;
 }
 button:active{
@@ -29,15 +37,27 @@ button:active{
 }
 
 main {
+  position: relative;
+  flex: 1;
   display: flex;
   justify-content: center;
-  background-color: #cfcfcf;
   font-size: 36px;
   font-weight: bold;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   width: 97vw;
   gap: 40px;
-  margin-top: 40px;
+}
+main::before {
+  content: "";
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  background-image: url("../src/warship.jpg");
+  background-size: 97vh;
+  opacity: 0.2;
+  z-index: -1;
 }
 
 section {
@@ -46,9 +66,8 @@ section {
   align-items: center;
   gap: 24px;
   padding: 24px;
-  background-color: white;
+  margin-top: 40px;
   min-width: 400px;
-  justify-content: center;
 }
 
 #gameOverText {
@@ -68,7 +87,6 @@ section {
 .box {
   width: 32px;
   height: 32px;
-  background-color: white;
   border: 1px solid black;
 }
 .boxHit {
@@ -86,12 +104,18 @@ section {
 
 footer {
   text-align: center;
-  background-color: grey;
-  font-size: 18px;
+  background-color: black;
+  color: white;
+  font-size: 12px;
   font-weight: bold;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-family: system-ui;
   width: 97vw;
-  margin-top: auto;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
+  padding: 5px;
+}
+
+#createdBy {
+  font-size: 16px;
+  margin-bottom: -20px;
 }

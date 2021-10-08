@@ -54,7 +54,6 @@ export default function runGame() {
         }
       }
     }
-    console.log(nameOfBoard.name + ship.name + ship.shipSize + randomDirection + randomX + randomY);
     // the return calls the function using the direction and coordinates generated
     return nameOfBoard.placeShip(ship.name, ship.shipSize, randomDirection, randomX, randomY);
   }
