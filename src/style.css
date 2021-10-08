@@ -2,6 +2,7 @@ body {
   display: flex;
   align-items: center;
   flex-direction: column;
+  min-height: 97vh;
 }
 
 header {
@@ -11,6 +12,8 @@ header {
   font-weight: bold;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   width: 97vw;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 }
 
 button {
@@ -34,6 +37,7 @@ main {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   width: 97vw;
   gap: 40px;
+  margin-top: 40px;
 }
 
 section {
@@ -45,6 +49,15 @@ section {
   background-color: white;
   min-width: 400px;
   justify-content: center;
+}
+
+#gameOverText {
+  margin-top: 40px;
+  color: red;
+  font-size: 124px;
+  font-weight: bold;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  display: none;
 }
 
 .board {
@@ -78,4 +91,7 @@ footer {
   font-weight: bold;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   width: 97vw;
+  margin-top: auto;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 }

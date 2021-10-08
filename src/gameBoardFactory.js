@@ -22,7 +22,8 @@ export default function gameBoardFactory(name) {
   function gameState() {
     sunkShips++;
     if (sunkShips === 5) {
-      alert('Game is over!');
+      const gameOver = document.getElementById('gameOverText');
+      gameOver.style.display = 'block';
 
       // blocks more shots from being made by adding a listener on the entire main element
       // which captures the event and stops it from propagating back to the box clicked
@@ -30,8 +31,6 @@ export default function gameBoardFactory(name) {
       clickBlocker.addEventListener('click', (e) => {
         e.stopImmediatePropagation();
       }, true);
-
-      throw 'GAME IS OVER';
     }
   }
 
