@@ -1,36 +1,4 @@
-function playerFactory(name) {
-
-  function shootEnemy(x, y, opponent) {
-    const wasHit = opponent.checkHit(x, y, opponent);
-    if (wasHit != false) {
-      routeHit(wasHit, opponent);
-    }
-  }
-
-  const routeHit = (shipInfo, opponent) => {
-    const workingStr = shipInfo.split(' ');
-    ships[workingStr[0]].receiveHit(workingStr[1]);
-    const wasSunk = ships[workingStr[0]].checkIfSunk();
-    if (wasSunk) {
-      opponent.gameState();
-    }
-  }
-
-  const ships = {
-    carrier: shipFactory('carrier', 5),
-    battleship: shipFactory('battleship', 4),
-    cruiser: shipFactory('cruiser', 3),
-    submarine: shipFactory('submarine', 2),
-    destroyer: shipFactory('destroyer', 2)
-  }
-
-  return {
-    name,
-    ships,
-    routeHit,
-    shootEnemy
-  }
-}
+import playerFactory from "./playerFactory";
 
 function gameBoardFactory() {
   // create 2d array for player gameboard
@@ -114,59 +82,25 @@ function gameBoardFactory() {
   };
 }
 
-function shipFactory(name, size) {
-  const shipSize = size;
-  const shipHits = [];
-  let isSunk = false;
-
-  for (let i = 0; i < shipSize; i++) {
-    shipHits.push(0);
-  }
-
-  const receiveHit = (num) => {
-    if (shipHits[num] === 0) {
-      shipHits[num] = 1;
-    }
-  }
-
-  const checkIfSunk = () => {
-    if (shipHits.reduce((total, curr) => total + curr) === shipSize) {
-      isSunk = true;
-      return true;
-    }
-  }
-
-  return {
-    name,
-    shipSize,
-    shipHits,
-    isSunk,
-    receiveHit,
-    checkIfSunk
-  }
-}
-
 const player = playerFactory('player');
 const playerBoard = gameBoardFactory();
 const AI = playerFactory('AI');
 const AIBoard = gameBoardFactory();
 
-function placeShips() {
-  playerBoard.placeShip(player.ships.carrier.name, player.ships.carrier.shipSize, 'vertical', 0, 0);
-  playerBoard.placeShip(player.ships.battleship.name, player.ships.battleship.shipSize, 'horizontal', 1, 1);
-  playerBoard.placeShip(player.ships.cruiser.name, player.ships.cruiser.shipSize, 'vertical', 6, 6);
-  playerBoard.placeShip(player.ships.submarine.name, player.ships.submarine.shipSize, 'vertical', 8, 8);
-  playerBoard.placeShip(player.ships.destroyer.name, player.ships.destroyer.shipSize, 'horizontal', 5, 2);
-
-  AIBoard.placeShip(AI.ships.carrier.name, AI.ships.carrier.shipSize, 'vertical', 0, 0);
-  AIBoard.placeShip(AI.ships.battleship.name, AI.ships.battleship.shipSize, 'horizontal', 1, 1);
-  AIBoard.placeShip(AI.ships.cruiser.name, AI.ships.cruiser.shipSize, 'vertical', 6, 6);
-  AIBoard.placeShip(AI.ships.submarine.name, AI.ships.submarine.shipSize, 'vertical', 8, 8);
-  AIBoard.placeShip(AI.ships.destroyer.name, AI.ships.destroyer.shipSize, 'horizontal', 5, 2);
-}
-
 export default function runGame() {
-  placeShips();
+  (function placeShips() {
+    playerBoard.placeShip(player.ships.carrier.name, player.ships.carrier.shipSize, 'vertical', 0, 0);
+    playerBoard.placeShip(player.ships.battleship.name, player.ships.battleship.shipSize, 'horizontal', 1, 1);
+    playerBoard.placeShip(player.ships.cruiser.name, player.ships.cruiser.shipSize, 'vertical', 6, 6);
+    playerBoard.placeShip(player.ships.submarine.name, player.ships.submarine.shipSize, 'vertical', 8, 8);
+    playerBoard.placeShip(player.ships.destroyer.name, player.ships.destroyer.shipSize, 'horizontal', 5, 2);
+
+    AIBoard.placeShip(AI.ships.carrier.name, AI.ships.carrier.shipSize, 'vertical', 0, 0);
+    AIBoard.placeShip(AI.ships.battleship.name, AI.ships.battleship.shipSize, 'horizontal', 1, 1);
+    AIBoard.placeShip(AI.ships.cruiser.name, AI.ships.cruiser.shipSize, 'vertical', 6, 6);
+    AIBoard.placeShip(AI.ships.submarine.name, AI.ships.submarine.shipSize, 'vertical', 8, 8);
+    AIBoard.placeShip(AI.ships.destroyer.name, AI.ships.destroyer.shipSize, 'horizontal', 5, 2);
+  })();
 
   // this array mirrors the board arrays and tracks where the AI has shot
   const AIShots = [...Array(10)].map(() => Array(10).fill(0));

@@ -11,13 +11,12 @@ export default function shipFactory(name, size) {
     if (shipHits[num] === 0) {
       shipHits[num] = 1;
     }
-    checkIfSunk();
   }
 
   const checkIfSunk = () => {
     if (shipHits.reduce((total, curr) => total + curr) === shipSize) {
       isSunk = true;
-      console.log('ship is sunk!');
+      return true;
     }
   }
 
@@ -26,6 +25,7 @@ export default function shipFactory(name, size) {
     shipSize,
     shipHits,
     isSunk,
-    receiveHit
+    receiveHit,
+    checkIfSunk
   }
 }

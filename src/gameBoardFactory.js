@@ -1,53 +1,81 @@
 export default function gameBoardFactory() {
   // create 2d array for player gameboard
-  const board = [...Array(10)].map(e => Array(10).fill(0));
-  let placedShips = 0;
+  const board = [...Array(10)].map(() => Array(10).fill( {label: '', value: 0 } ));
+  
   let sunkShips = 0;
 
-  function placeShip(shipSize, direction, startingX, startingY) {
+  function placeShip(shipName, shipSize, direction, startingX, startingY) {
     // places ship going DOWN
-    if (direction === 'vertical') {
-      for (let i = 0; i < shipSize; i++) {
-        board[startingX][startingY + i] = 1;
+      if (direction === 'vertical') {
+        for (let i = 0; i < shipSize; i++) {
+          board[startingX][startingY + i] = {label: shipName + ' ' + i, value: 1};
+        }
       }
+      // places ship going RIGHT
+      if (direction === 'horizontal') {
+        for (let i = 0; i < shipSize; i++) {
+          board[startingX + i][startingY] = {label: shipName + ' ' + i, value: 1};
+        }
+      } 
     }
-    // places ship going RIGHT
-    if (direction === 'horizontal') {
-      for (let i = 0; i < shipSize; i++) {
-        board[startingX + i][startingY] = 1;
-      }
-    }
-
-    placedShips++;
-    console.log(placedShips);
-  }
-
-  function checkHit(x, y) {
-    if (board[x][y] === 1) {
-      console.log('it\'s a hit!'); // pass this to the ship object
-      console.log('set board color to red');
-      board[x][y] = 2;
-    } 
-    if (board[x][y] === 0) {
-      console.log('it\'s a miss!'); // pass this to the ship object
-      console.log('set board color to green');
-      board[x][y] = 3;
-    } 
-  }
 
   function gameState() {
-    if (placedShips === sunkShips) {
-      console.log('game over!');
-    } else {
-      console.log('keep shooting!');
+    sunkShips++;
+    if (sunkShips === 5) {
+      alert('Game is over!');
+
+      // blocks more shots from being made by adding a listener on the entire main element
+      // which captures the event and stops it from propagating back to the box clicked
+      let clickBlocker = document.querySelector('main');
+      clickBlocker.addEventListener('click', (e) => {
+        e.stopImmediatePropagation();
+      }, true);
+
+      throw 'GAME IS OVER';
     }
+  }
+
+  function checkHit(x, y, opponent) {
+    if (board[x][y].value === 1) {
+      let tempName = board[x][y].label;
+      board[x][y] = {label: tempName, value: 2};
+
+      let opName = '';
+      if (opponent == AIBoard) {
+        opName = 'AI';
+      }
+      if (opponent == playerBoard) {
+        opName = 'player';
+      }
+      // sets color of hit
+      const box = document.getElementById(opName + 'Box' + x + y);
+      box.setAttribute('class', 'boxHit');
+
+      return tempName;
+    } 
+    if (board[x][y].value === 0) {
+      board[x][y] = {label: '', value: 3};
+
+      let opName = '';
+      if (opponent == AIBoard) {
+        opName = 'AI';
+      }
+      if (opponent == playerBoard) {
+        opName = 'player';
+      }
+      // sets color of miss
+      const box = document.getElementById(opName + 'Box' + x + y);
+      box.setAttribute('class', 'boxMiss');
+
+      return false;
+    } 
   }
 
   return {
     board,
     placeShip,
+    gameState,
     checkHit,
-    gameState
+    sunkShips
   };
 }
-
