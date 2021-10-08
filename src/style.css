@@ -13,6 +13,18 @@ header {
   width: 97vw;
 }
 
+button {
+  width: 200px;
+  height: 40px;
+  margin: 20px;
+  background-color: lightgrey;
+  border: 2px solid black;
+  border-radius: 8px;
+}
+button:active{
+  transform: translateY(2px);
+}
+
 main {
   display: flex;
   justify-content: center;
@@ -44,6 +56,18 @@ section {
   width: 32px;
   height: 32px;
   background-color: white;
+  border: 1px solid black;
+}
+.boxHit {
+  width: 32px;
+  height: 32px;
+  background-color: red;
+  border: 1px solid black;
+}
+.boxMiss {
+  width: 32px;
+  height: 32px;
+  background-color: green;
   border: 1px solid black;
 }
 

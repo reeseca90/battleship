@@ -1,7 +1,7 @@
 function playerFactory(name) {
 
   function shootEnemy(x, y, opponent) {
-    const wasHit = opponent.checkHit(x, y);
+    const wasHit = opponent.checkHit(x, y, opponent);
     if (wasHit != false) {
       routeHit(wasHit, opponent);
     }
@@ -56,25 +56,43 @@ function gameBoardFactory() {
   function gameState() {
     sunkShips++;
     if (sunkShips === 5) {
-      console.log('game over!');
+      alert('Game is over!')
       throw 'GAME IS OVER';
-    } else {
-      console.log('keep shooting!');
     }
   }
 
-  function checkHit(x, y) {
+  function checkHit(x, y, opponent) {
     if (board[x][y].value === 1) {
       let tempName = board[x][y].label;
-      console.log('it\'s a hit!'); // pass this to the ship object
-      console.log('set board color to red');
       board[x][y] = {label: tempName, value: 2};
+
+      let opName = '';
+      if (opponent == AIBoard) {
+        opName = 'AI';
+      }
+      if (opponent == playerBoard) {
+        opName = 'player';
+      }
+      // sets color of hit
+      const box = document.getElementById(opName + 'Box' + x + y);
+      box.setAttribute('class', 'boxHit');
+
       return tempName;
     } 
     if (board[x][y].value === 0) {
-      console.log('it\'s a miss!'); // pass this to the ship object
-      console.log('set board color to green');
       board[x][y] = {label: '', value: 3};
+
+      let opName = '';
+      if (opponent == AIBoard) {
+        opName = 'AI';
+      }
+      if (opponent == playerBoard) {
+        opName = 'player';
+      }
+      // sets color of miss
+      const box = document.getElementById(opName + 'Box' + x + y);
+      box.setAttribute('class', 'boxMiss');
+
       return false;
     } 
   }
@@ -106,7 +124,6 @@ function shipFactory(name, size) {
   const checkIfSunk = () => {
     if (shipHits.reduce((total, curr) => total + curr) === shipSize) {
       isSunk = true;
-      console.log('ship is sunk!');
       return true;
     }
   }
@@ -140,32 +157,47 @@ function placeShips() {
   AIBoard.placeShip(AI.ships.destroyer.name, AI.ships.destroyer.shipSize, 'horizontal', 5, 2);
 }
 
-function runGame() {
+export default function runGame() {
+  // code to delete all boxes and remake them
+/*   const playerBoard = document.getElementById('playerBoard');
+  while (playerBoard.firstElementChild) {
+    playerBoard.removeChild(playerBoard.firstElementChild);
+  }
+  const AIBoard = document.getElementById('AIBoard');
+  while (AIBoard.firstElementChild) {
+    AIBoard.removeChild(AIBoard.firstElementChild);
+  } */
+    
   placeShips();
   // this array mirrors the board arrays and tracks where the AI has shot
   const AIShots = [...Array(10)].map(() => Array(10).fill(0));
 
-  // this loop actually runs the game
-  while (AIBoard.gameOver != true) {
-    player.shootEnemy(prompt('enter X'), prompt('enter Y'), AIBoard);
+  const AIMapping = document.getElementById('AIBoard');
+  AIMapping.addEventListener('click', (e) => {
+    const workingArr = e.target.id.split('');
+    const x = workingArr[workingArr.length - 2];
+    const y = workingArr[workingArr.length - 1];
+    player.shootEnemy(x, y, AIBoard);
+    AIShot();
+  });
 
-    (() => {
-      let goodAIShot = false;
-      let AIx = 0;
-      let AIy = 0;
+  const AIShot = () => {
+    let goodAIShot = false;
+    let AIx = 0;
+    let AIy = 0;
 
-      // check shots array to not shoot the same spot twice
-      while (goodAIShot === false) {
-        AIx = Math.floor(Math.random() * 10);
-        AIy = Math.floor(Math.random() * 10);
+    // check shots array to not shoot the same spot twice
+    while (goodAIShot === false) {
+      AIx = Math.floor(Math.random() * 10);
+      AIy = Math.floor(Math.random() * 10);
 
-        if (AIShots[AIx][AIy] === 0) {
-          goodAIShot = true;
-        }
+      if (AIShots[AIx][AIy] === 0) {
+        goodAIShot = true;
+        AIShots[AIx][AIy] = 1;
       }
-      
-      AI.shootEnemy(AIx, AIy, playerBoard);
-    })();
-  }
+    }
+    
+    AI.shootEnemy(AIx, AIy, playerBoard);
+  };
 }
 

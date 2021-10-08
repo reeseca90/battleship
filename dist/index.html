@@ -5,20 +5,22 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Battleship</title>
-  <script src="./main.js"></script>
-  <link rel="stylesheel" href="../src/style.css">
+  <script src="./main.js" defer></script>
 </head>
 <body>
   <header>
     <p> BATTLESHIP </p>
+    <button id="startGame">Start New Game</button>
   </header>
 
   <main>
-    <section id="playerBoard">
-      <p>Player Board</p>
+    <section id="playerSide">
+      <div>Player Board</div>
+      <div id="playerBoard" class="board"></div>
     </section>
-    <section id="AIboard">
-      <p>AI Board</p>
+    <section id="AISide">
+      <div>AI Board</div>
+      <div id="AIBoard" class="board"></div>
     </section>
   </main>
 
