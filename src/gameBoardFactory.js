@@ -1,4 +1,4 @@
-export default function gameBoardFactory() {
+export default function gameBoardFactory(name) {
   // create 2d array for player gameboard
   const board = [...Array(10)].map(() => Array(10).fill( {label: '', value: 0 } ));
   
@@ -41,10 +41,10 @@ export default function gameBoardFactory() {
       board[x][y] = {label: tempName, value: 2};
 
       let opName = '';
-      if (opponent == AIBoard) {
+      if (opponent.name == 'AIBoard') {
         opName = 'AI';
       }
-      if (opponent == playerBoard) {
+      if (opponent.name == 'playerBoard') {
         opName = 'player';
       }
       // sets color of hit
@@ -57,10 +57,10 @@ export default function gameBoardFactory() {
       board[x][y] = {label: '', value: 3};
 
       let opName = '';
-      if (opponent == AIBoard) {
+      if (opponent.name == 'AIBoard') {
         opName = 'AI';
       }
-      if (opponent == playerBoard) {
+      if (opponent.name == 'playerBoard') {
         opName = 'player';
       }
       // sets color of miss
@@ -72,6 +72,7 @@ export default function gameBoardFactory() {
   }
 
   return {
+    name,
     board,
     placeShip,
     gameState,

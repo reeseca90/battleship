@@ -1,5 +1,5 @@
 import './style.css';
-import runGame from './bigGameFile';
+import runGame from './runGame';
 
 const newGameButton = document.getElementById('startGame');
 newGameButton.addEventListener('click', reloadPage);
