@@ -1,9 +1,9 @@
 import './style.css';
 import runGame from './bigGameFile';
-/* 
+
 const newGameButton = document.getElementById('startGame');
-newGameButton.addEventListener('click', runGame);
- */
+newGameButton.addEventListener('click', reloadPage);
+
 const playerBoard = document.getElementById('playerBoard');
 const AIBoard = document.getElementById('AIBoard');
 
@@ -29,6 +29,10 @@ for (let i = 0; i < 10; i++) {
     row.appendChild(box);
   }
   AIBoard.appendChild(row);
+}
+
+function reloadPage() {
+  window.location.href = window.location.href;
 }
 
 runGame();

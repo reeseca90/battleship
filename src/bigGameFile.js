@@ -56,7 +56,15 @@ function gameBoardFactory() {
   function gameState() {
     sunkShips++;
     if (sunkShips === 5) {
-      alert('Game is over!')
+      alert('Game is over!');
+
+      // blocks more shots from being made by adding a listener on the entire main element
+      // which captures the event and stops it from propagating back to the box clicked
+      let clickBlocker = document.querySelector('main');
+      clickBlocker.addEventListener('click', (e) => {
+        e.stopImmediatePropagation();
+      }, true);
+
       throw 'GAME IS OVER';
     }
   }
@@ -158,28 +166,26 @@ function placeShips() {
 }
 
 export default function runGame() {
-  // code to delete all boxes and remake them
-/*   const playerBoard = document.getElementById('playerBoard');
-  while (playerBoard.firstElementChild) {
-    playerBoard.removeChild(playerBoard.firstElementChild);
-  }
-  const AIBoard = document.getElementById('AIBoard');
-  while (AIBoard.firstElementChild) {
-    AIBoard.removeChild(AIBoard.firstElementChild);
-  } */
-    
   placeShips();
+
   // this array mirrors the board arrays and tracks where the AI has shot
   const AIShots = [...Array(10)].map(() => Array(10).fill(0));
 
-  const AIMapping = document.getElementById('AIBoard');
-  AIMapping.addEventListener('click', (e) => {
+  const playerShot = (e) => {
     const workingArr = e.target.id.split('');
     const x = workingArr[workingArr.length - 2];
     const y = workingArr[workingArr.length - 1];
-    player.shootEnemy(x, y, AIBoard);
-    AIShot();
-  });
+
+    if (AIBoard.board[x][y].value === 0 || AIBoard.board[x][y].value === 1) {
+      player.shootEnemy(x, y, AIBoard);
+      AIShot();
+    } else {
+      console.log('spot has been clicked');
+    }
+  };
+
+  const AIMapping = document.getElementById('AIBoard');
+  AIMapping.addEventListener('click', playerShot);
 
   const AIShot = () => {
     let goodAIShot = false;
@@ -199,5 +205,7 @@ export default function runGame() {
     
     AI.shootEnemy(AIx, AIy, playerBoard);
   };
+
+
 }
 
